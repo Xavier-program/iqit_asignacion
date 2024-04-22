@@ -1,0 +1,522 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    outline: none;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.btnIS{
+    background-color: #006b04;
+}
+.btn{
+    color: white;
+    background-color: #009205;
+}
+.btn:hover{
+    color: white;
+    background-color: #006b04;
+}
+.username{
+    color: #B62118;
+    font-weight: bold;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none; 
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  input[type="file"] {
+  width: 300px; /* Ancho deseado */
+  height: 45px; /* Altura deseada */
+  }
+  
+  td {
+    padding: 1px; /* Espacio alrededor del contenido del td */
+  }
+
+  .descarga {
+    display: inline-block;
+    padding: 8px 16px; /* Espaciado interior */
+    background-color: #007bff; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: 1px solid #007bff; /* Borde */
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Elimina el subrayado */
+  }
+
+  .descarga:hover {
+    background-color: #0056b3; /* Cambia el color de fondo al pasar el mouse */
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2; /* Fondo gris claro */
+  }
+
+
+.col-form-label{
+    color: black;
+}
+
+body{
+    background: linear-gradient(
+        90deg,
+        /*
+        rgb(51, 51, 148) 25%,
+        rgb(125, 127, 2SSs04)73%);*/
+
+        rgb(255, 255, 255) 25%,
+        rgb(255, 255, 255)73%);
+
+
+        font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.container{
+    max-width: 1980px;
+    margin: 0 auto;
+    
+
+}
+
+.back{
+    padding: 32px 0;
+    background-color: blue;
+   
+}
+
+.menu{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    right: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    background-color: #313450;
+}
+
+/* .logo{
+    font-size: 24px;
+    color: #ffffff;
+    font-weight: 800;
+    text-transform: uppercase;
+    
+} */
+
+.logo img{
+    /*position: absolute;*/
+    width: 200px;
+    height: 50px;
+    
+}
+
+.menu .navbar ul li{
+    position: relative;
+    float: right; /*POSICION DE LOS ICONOS DE SESION*/
+    padding-right: 30px;
+
+}
+
+.menu .navbar ul li a{
+    font-size: 18px;
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    display: block;
+}
+
+.menu .navbar ul li a:hover{
+    color: rgb(126, 211, 211);
+    
+}
+
+#menu{
+    display: none;
+}
+
+/*Barras para abrir menu en responsivo*/ 
+.menu-icono{
+    padding-left: 250px;
+    width: 50px;
+    height: 50px;
+    color: white; 
+}
+
+.menu label{
+    cursor: pointer;
+    display: none;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-left: 5%;
+    padding-right: 5%;
+    font-weight: bold;
+   
+}
+
+.user-img{
+    width: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+.sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    height: 100vh;
+    width: 100px;
+    background-color: #313450;
+    padding: 0.4rem 0.8rem;
+    padding-top: 80px;
+    transition: all 0.5s ease;
+    z-index: 10; /* Asegurémonos de que el z-index del sidebar sea menor que el del content-wrapper */
+}
+
+/*ESTILOS DE FORMULARIO INICIO SESION*/
+.content-wrapper{
+    margin-left: 130px ;
+    margin-right: 130px ;
+    margin-top: 80px;
+}
+
+
+.sidebar .fa-solid{
+    color: #eee;
+}
+
+/* .sidebar .fa-regular{
+    color: #eee;
+}
+
+.sidebar .fa-regular:hover{
+    color: #020202;
+} */
+
+.sidebar.active ~ content-wrapper{
+    left: 250px; /* Cuando la barra lateral está abierta, ajustar el margen */
+    width: calc(100% - 250px);
+}
+  
+.sidebar.active {
+    width: 250px;
+}
+
+.content-wrapper {
+    margin-top: 30px; /* Ajustamos el margen superior para dejar espacio para el sidebar */
+    margin-left: 120px; /* Cambiamos el valor a 100px para coincidir con el ancho del sidebar cuando está oculto */
+    padding-left: 30px;
+    margin-right: 100px;
+    transition: margin-left 0.5s ease; /* Añadimos una transición para que el ajuste sea suave */
+}
+
+.sidebar.active ~ .content-wrapper {
+    margin-left: 250px; /* Ajustamos el margen izquierdo para que coincida con el ancho del sidebar cuando esté activo */
+}
+
+
+.sidebar #btn{
+    position: absolute;
+    padding-bottom: 250px;
+    left: 50px; /*Posicion del boton hamburguesa*/
+    font-size: 1.2rem;
+    line-height: 50px;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.sidebar.active #btn{
+    left: 90%;
+}
+
+.sidebar .top .logo {
+    color: #ffffff;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.sidebar.active .top .logo{
+    opacity: 1;
+}
+
+.top .logo{
+    font-size: 2rem;
+    margin-right: 5px;
+}
+
+/*Barras menu*/
+.user{
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+}
+/*
+.user p{
+    color: #ffffff;
+    opacity: 1;
+    margin-left: 1rem;
+} */
+
+.bold{
+    font-weight: 600;
+}
+
+.sidebar p {
+    opacity: 0;
+}
+
+.sidebar.active p {
+    opacity: 1;
+}
+
+/**/
+.sidebar ul{
+    padding: 0;
+}
+
+.sidebar ul li{
+    padding: 10px;
+    position: relative;
+    list-style-type: none;
+    height: 50px;
+    width:100%; /*pone el hover del ancho del texto indicado*/
+    margin: 0.3rem auto;
+    list-style: 15px;
+}
+
+.sidebar ul li a{
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 0.9rem;
+    /* height: 150px; */
+}
+
+
+.sidebar ul li a:hover{
+    background-color: #ffffff; /*blanco*/
+    color:#313450;
+    
+}
+
+.sidebar ul li a i{
+    min-width: 40px;
+    text-align: center;
+    height: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+}
+
+.sidebar .nav-item{
+    opacity: 0;
+}
+
+.sidebar.active .nav-item{
+    opacity: 1;
+}
+
+.sidebar ul li .tooltip{
+    position: absolute;
+    left: 190px;
+    top: 50px;
+    transform: translate(-50%, -50%);
+    /*background-color: aquamarine;*/
+    box-shadow: 0 0.4rem 0.8rem rgba(155, 201, 231, 0.986);
+    border-radius: .6rem;
+    padding: .4rem 1.2rem;
+    line-height: 1.8rem;
+    z-index: 20;
+    opacity: 0;
+
+}
+
+.sidebar ul li:hover .tooltip{
+    opacity: 1;
+
+}
+
+.sidebar.active ul li  .tooltip{
+    display: none;
+}
+
+.navbar .dropdown {
+    position: relative; /* Cambiar a posición relativa */
+}
+
+.navbar .dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    /*top: calc(100% + 10px);  Colocar el dropdown debajo del enlace */
+    top: 40px;
+    left: 0;
+    background-color: #313450;
+    min-width: 10px;
+    z-index: 1;
+    padding: 1px 0;
+    /* margin: 0; */
+    list-style: none;
+    text-align: left;
+    border-radius: 4px;
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown .dropdown-item {
+    display: block;
+    padding: 7px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.navbar .dropdown .dropdown-item:hover {
+    background-color: #fffefe;
+    color: black;
+}
+
+
+
+
+.inicioSesion, .registro{
+    align-self: center;
+    width: 600px;
+    border: 2px solid #313450;
+    padding: 6rem;
+    background-color: #313450;;
+    border: none;
+    border-radius: 20px;
+    color: aliceblue;
+}
+
+h3{
+    display: block;
+    border: 2px solid #313450;
+    width: 95%;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+label{
+    color: aliceblue;
+    font-size: 18px;
+    padding: 10px;
+    font-weight: 300;
+}
+
+input{
+    display: block;
+    border: 2px solid #313450;
+    width: 95%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+button{
+    float: right;
+    background-color: rgb(84, 209, 168);
+    padding: 0.5rem;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+button:hover{
+    background-color: white;
+    color: black;
+}
+
+.sesion{
+    float: left;
+    color: #86ec08;
+    margin-left: 10px;
+    padding: .5rem;
+    text-decoration: none;
+}
+
+.sesion:hover{
+    color: white;
+}
+
+.link{
+    float: right;
+    padding: .5rem;
+    text-decoration: none;
+}
+
+.link:hover{
+    color: rgb(190, 59, 59);
+}
+
+.iconos:hover{
+    color: black;
+}
+
+/*TABAJAMOS LA PARTE RESPONSIVA*/
+
+.listaArchivos{
+ text-align: center;
+}
+
+label{
+    color: black;
+}
+
+@media(max-width: 991px){
+
+    .menu{
+        padding: 30px;
+    }
+
+    .menu label{
+        display: initial;
+    }
+
+    .back{
+        padding: 47px 0;
+    }
+
+    .menu .navbar{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: rgba(12, 62, 128, 0.788);
+        display: none;
+    }
+
+    .menu .navbar ul li{
+        width: 100%;
+    }
+
+    #menu:checked ~ .navbar{ /*alt + 126 para signo ~ */
+        display: initial;
+    }
+}
