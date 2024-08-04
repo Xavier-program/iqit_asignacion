@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ArchivoCompletado;
 
 class UploadController extends Controller
 {
@@ -11,7 +12,8 @@ class UploadController extends Controller
     {
         // Validar el archivo
         $request->validate([
-            'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg'
+            'archivo' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg',
+            'userId' => 'required|exists:users,id' // Validar que el userId exista en la tabla users
         ]);
 
         // Obtener el archivo del request
@@ -25,14 +27,13 @@ class UploadController extends Controller
         // Mover el archivo a la carpeta de destino
         $archivo->move(public_path('uploads/' . $userId), $fileName);
 
-        // Aquí puedes guardar la información del archivo en la base de datos si es necesario
-        // Ejemplo: DB::table('archivos')->insert(['user_id' => $userId, 'archivo' => $filePath]);
-
-        // Retornar una respuesta JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Archivo subido correctamente',
-            'file' => $filePath
+        // Guardar la información del archivo en la base de datos
+        ArchivoCompletado::create([
+            'user_id' => $userId,
+            'archivo' => $filePath,
         ]);
+
+        // Redirigir de vuelta con un mensaje de éxito
+        return redirect()->back()->with('success', 'Archivo subido correctamente');
     }
 }

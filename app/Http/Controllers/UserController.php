@@ -5,6 +5,8 @@ use App\Http\ArchivoController;
 use App\Models\Archivo;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -12,18 +14,38 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+{
+    // Obtener todos los usuarios de la BD
+    $usuarios = User::all();
 
-        // Obtener todos los usuarios de la BD
-        $usuarios = User::all();
-        
-        // Obtener el usuario autenticado, si hay alguno
-        $usuario = auth()->user();
-        
-        // Retornar la vista con la lista de usuarios y el usuario autenticado (si está definido)
-        return view('usuario.index', ['usuarios' => $usuarios, 'usuario' => $usuario]);
-    
+    // Obtener el usuario autenticado, si hay alguno
+    $usuario = auth()->user();
+
+    if ($usuario) {
+        // Obtener la cantidad de formularios asignados
+        $formulariosAsignados = DB::table('archivos_asignados_v2')
+            ->where('user_id', $usuario->id)
+            ->pluck('archivo')
+            ->toArray();
+
+        // Obtener la cantidad de formularios subidos
+        $formulariosSubidos = \App\Models\ArchivoCompletado::where('user_id', $usuario->id)
+            ->pluck('archivo')
+            ->toArray();
+
+        // Pasar la información a la vista
+        return view('usuario.index', [
+            'usuarios' => $usuarios,
+            'usuario' => $usuario,
+            'formulariosAsignados' => $formulariosAsignados,
+            'formulariosSubidos' => $formulariosSubidos
+        ]);
     }
+
+    // Retornar la vista con la lista de usuarios y el usuario autenticado (si está definido)
+    return view('usuario.index', ['usuarios' => $usuarios, 'usuario' => $usuario]);
+}
+
 
     /**
      * Show the form for creating a new resource.

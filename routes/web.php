@@ -86,9 +86,14 @@ Route::post('formularios/asignar/{id}', [FormularioController::class, 'asignarAr
 Route::get('formularios/mostrar-archivos', [FormularioController::class, 'mostrarArchivos'])->name('formularios.mostrar-archivos')->middleware('auth');
 
 // Ruta para eliminar los archivos asignados
-Route::post('formularios/eliminar-archivo', [FormularioController::class, 'eliminarArchivo'])->name('formularios.eliminar-archivo');
+Route::post('formularios/eliminar-archivo', [FormularioController::class, 'eliminarArchivo'])->name('formularios.eliminar-archivo'); 
 
 // Ruta para descargar archivos de usuario
 Route::get('/usuario/{id}/descargar', [FormularioController::class, 'mostrarArchivos'])->name('formularios.mostrar-archivos');
 Route::get('/usuario/{id}', [FormularioController::class, 'mostrarSubirArchivos'])->name('formularios.mostrar-archivos')->middleware('auth');
 
+ // Ruta para la vista de dependencias (index)
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
+// Ruta para la vista de instituciones
+Route::get('/admin/instituciones', [AdminController::class, 'instituciones'])->name('admin.instituciones');

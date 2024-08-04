@@ -40,7 +40,7 @@ class FormularioController extends Controller
     $archivosAsignados = DB::table('archivos_asignados_v2')
         ->where('user_id', $usuario->id)
         ->pluck('archivo')
-        ->toArray();
+        ->toArray(); 
     
     return view('formularios.index', compact('archivosAsignados', 'usuario'));
 }
@@ -114,7 +114,9 @@ class FormularioController extends Controller
             ->orderBy('formulario', 'asc')
             ->get();
         $usuario = auth()->user();
-        return view('formularios.subir', ['usuario' => $usuario], compact('formulario', 'formularios'));
+        $formularioCount = $formularios->count(); // Contar los formularios
+
+        return view('formularios.subir', ['usuario' => $usuario, 'formularios' => $formularios, 'formularioCount' => $formularioCount]);
     }
 
     // Controla la vista 'formularios.create' (formularios/create.blade.php)
@@ -193,20 +195,31 @@ class FormularioController extends Controller
     public function destroy($id)
     {
         $formulario = Formulario::find($id);
-
+    
         if (!$formulario) {
             return redirect()->back()->with('error', 'Formulario no encontrado');
         }
-
+    
         $archivo = public_path($formulario->formulario);
         if (file_exists($archivo)) {
             unlink($archivo);
         }
-
+    
         $formulario->delete();
-
+    
+        // Obtener todos los formularios después de eliminar el formulario
         $formularios = Formulario::all();
         $usuario = auth()->user();
-        return view('formularios.subir', ['formularios' => $formularios, 'usuario' => $usuario])->with('success', 'Formulario eliminado correctamente');
+        $formularioCount = $formularios->count(); // Contar los formularios
+    
+        return view('formularios.subir', [
+            'formularios' => $formularios,
+            'usuario' => $usuario,
+            'formularioCount' => $formularioCount
+        ])->with('success', 'Formulario eliminado correctamente');
     }
+    
 }
+
+
+

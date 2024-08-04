@@ -32,6 +32,7 @@
                  <!-- <h2  style="text-align: center;"></h2> -->
                  <h5>Avance total correspondiente al censo actual:</h5>
                  <hr>
+                 
 
                  <?php
                     $totalIteraciones = 0; // Inicializa el contador total de iteraciones
