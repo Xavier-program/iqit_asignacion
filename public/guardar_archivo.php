@@ -1,6 +1,7 @@
 <?php
-if (isset($_FILES['archivo'])) {
+if (isset($_FILES['archivo']) && isset($_POST['userId']) && isset($_POST['rutaColumn'])) {
     $userId = $_POST['userId']; // Obtener userId del formulario
+    $rutaColumn = $_POST['rutaColumn']; // Obtener la columna de la ruta del formulario
     $ruta = 'uploads/' . $_FILES['archivo']['name'];
     move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
 
@@ -18,8 +19,13 @@ if (isset($_FILES['archivo'])) {
         die("La conexión falló: " . $conn->connect_error);
     }
 
+    // Escapar las variables para evitar inyección SQL
+    $userId = $conn->real_escape_string($userId);
+    $ruta = $conn->real_escape_string($ruta);
+    $rutaColumn = $conn->real_escape_string($rutaColumn);
+
     // Preparar la consulta SQL para actualizar la ruta del archivo en la tabla 'users'
-    $sql = "UPDATE users SET rutaF1 = '$ruta' WHERE id = $userId";
+    $sql = "UPDATE users SET $rutaColumn = '$ruta' WHERE id = $userId";
 
     // Ejecutar la consulta
     if ($conn->query($sql) === TRUE) {
@@ -31,6 +37,6 @@ if (isset($_FILES['archivo'])) {
     // Cerrar la conexión
     $conn->close();
 } else {
-    echo json_encode(['success' => false, 'message' => 'No se proporcionó ningún archivo']);
+    echo json_encode(['success' => false, 'message' => 'No se proporcionó ningún archivo, ID de usuario o columna de ruta']);
 }
 ?>

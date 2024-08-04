@@ -1,92 +1,212 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers;
 
 use App\Models\Formulario;
 use App\Models\User;
-use App\Models\Archivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FormularioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    // Controlador para la eliminación de los archivos asignados
+    public function eliminarArchivo(Request $request)
+    {
+        $archivo = $request->input('archivo');
+        $userId = auth()->user()->id;
+
+        // Eliminar el archivo del almacenamiento
+        if (file_exists(public_path($archivo))) {
+            unlink(public_path($archivo));
+        }
+
+        // Eliminar la entrada de la base de datos
+        DB::table('archivos_asignados_v2')
+            ->where('user_id', $userId)
+            ->where('archivo', $archivo)
+            ->delete();
+
+        return redirect()->route('formularios.mostrar-archivos')->with('success', 'Archivo eliminado correctamente');
+    }
+
+    // Controla la vista 'formularios.index' (formularios/index.blade.php)
+    public function mostrarSubirArchivos()
 {
-       // Cargar los datos de los terminos en objeto $terminos
-       //$terminos = Formulario::all();
-       // Habilitar la vista
-       // Obtener el usuario autenticado, si hay alguno
-       // Obtener todos los usuarios de la BD
-       $usuarios = User::all();
-       $archivos = Archivo::all();
-       // Obtener el usuario autenticado, si hay alguno
-       $usuario = auth()->user();
-       return view('formularios.index', ['usuarios' => $usuarios, 'usuario' => $usuario, 'archivos' => $archivos]); // En ruta alumnos, busca la vista
+    if (!auth()->check()) {
+        return redirect()->route('inicioSesion'); // Redirige al inicio de sesión si el usuario no está autenticado
+    }
+
+    $usuario = auth()->user();
+    $archivosAsignados = DB::table('archivos_asignados_v2')
+        ->where('user_id', $usuario->id)
+        ->pluck('archivo')
+        ->toArray();
+    
+    return view('formularios.index', compact('archivosAsignados', 'usuario'));
 }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    // Controla la vista 'formularios.indexxx' (formularios/indexxx.blade.php)
+    public function mostrarArchivos($id)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('inicioSesion'); // Redirige al inicio de sesión si el usuario no está autenticado
+        }
+    
+        $usuario = User::findOrFail($id); // Encuentra el usuario por su ID
+        $formularios = DB::table('formularios')->get();
+        
+        // Obtener los archivos asignados al usuario
+        $archivosAsignados = DB::table('archivos_asignados_v2')
+            ->where('user_id', $usuario->id)
+            ->pluck('archivo')
+            ->toArray();
+    
+        // Devuelve la vista 'formularios.indexxx' con los datos de los archivos asignados y el usuario
+        return view('formularios.indexxx', compact('archivosAsignados', 'usuario'));
+    }
+    
+
+
+    // Controla la asignación de archivos a un usuario
+    public function asignarArchivos(Request $request, $id)
+    {
+        $usuario = User::findOrFail($id);
+        $archivosSeleccionados = $request->input('archivos', []);
+
+        // Elimina las asignaciones anteriores
+        //DB::table('archivos_asignados_v2')->where('user_id', $usuario->id)->delete();
+
+        // Inserta las nuevas asignaciones
+        foreach ($archivosSeleccionados as $archivo) {
+            DB::table('archivos_asignados_v2')->insert([
+                'user_id' => $usuario->id,
+                'archivo' => $archivo,
+            ]);
+        }
+
+        return redirect()->route('formularios.index')->with('success', 'Archivos asignados correctamente');
+    }
+
+    // Controla la vista 'admin.archivos' (admin/archivos.blade.php)
+    public function asignarArchivosVista($id)
+    {
+        $usuario = User::findOrFail($id);
+        $formularios = DB::table('formularios')->get();
+        
+        // Obtener los archivos asignados al usuario
+        $archivosAsignados = DB::table('archivos_asignados_v2')
+            ->where('user_id', $usuario->id)
+            ->pluck('archivo')
+            ->toArray();
+        
+        return view('admin.archivos', compact('usuario', 'formularios', 'archivosAsignados'));
+    }
+
+    // Controla la vista 'formularios.subir' (formularios/subir.blade.php)
+    public function index(Request $request)
+    {
+        $formulario = trim($request->get('formulario'));
+        $formularios = DB::table('formularios')
+            ->select('id', 'formulario')
+            ->where('formulario', 'LIKE', '%' . $formulario . '%')
+            ->orderBy('formulario', 'asc')
+            ->get();
+        $usuario = auth()->user();
+        return view('formularios.subir', ['usuario' => $usuario], compact('formulario', 'formularios'));
+    }
+
+    // Controla la vista 'formularios.create' (formularios/create.blade.php)
     public function create()
     {
-        //
+        $usuarios = User::all();
+        $usuario = auth()->user();
+        return view('formularios.create', ['usuarios' => $usuarios, 'usuario' => $usuario]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Controla la acción de almacenar un formulario
     public function store(Request $request)
     {
-        //
+        $formularios = Formulario::all();
+        $usuarios = User::all();
+        $usuario = auth()->user();
+
+        $formulario = new Formulario();
+
+        $request->validate([
+            'formulario' => 'required|file',
+        ]);
+
+        if ($request->hasFile('formulario')) {
+            $file = $request->file('formulario');
+            $destino = 'uploads/';
+            $fileName = $file->getClientOriginalName();
+            $uploadSuccess = $request->file('formulario')->move($destino, $fileName);
+            $formulario->formulario = $destino . $fileName;
+            $formulario->ruta = $destino . $fileName;
+        }
+
+        $formulario->save();
+
+        return redirect()->route('formularios.index')->with(['usuarios' => $usuarios, 'usuario' => $usuario, 'formularios' => $formularios, 'success' => 'Formulario subido exitosamente']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Formulario $formulario)
+    // Controla la vista 'formularios.edit' (formularios/edit.blade.php)
+    public function edit($id)
     {
-        //
+        $formulario = Formulario::find($id);
+        return view('formularios.edit', ['formulario' => $formulario]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Formulario $formulario)
+    // Controla la acción de actualizar un formulario
+    public function update(Request $request, $id)
     {
-        //
+        $formulario = Formulario::find($id);
+        if (!$formulario) {
+            return redirect()->back()->with('error', 'Formulario no encontrado');
+        }
+
+        if ($request->hasFile('formulario')) {
+            if ($formulario->formulario && file_exists(public_path($formulario->formulario))) {
+                unlink(public_path($formulario->formulario));
+            }
+
+            $file = $request->file('formulario');
+            $destino = 'uploads/';
+            $fileName = $file->getClientOriginalName();
+            $uploadSuccess = $request->file('formulario')->move($destino, $fileName);
+            $formulario->formulario = $destino . $fileName;
+        }
+
+        $formulario->save();
+
+        $formularios = Formulario::all();
+        $usuarios = User::all();
+        $usuario = auth()->user();
+
+        return view('formularios.subir', ['usuarios' => $usuarios, 'usuario' => $usuario, 'formularios' => $formularios])
+            ->with('success', 'Formulario actualizado correctamente');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Formulario $formulario)
-{
-    // Validar y procesar la solicitud de actualización
-    $usuario_id = $request->usuario_id;
-
-    // Buscar el archivo asociado al usuario
-    $archivo = Archivo::where('id_usuario', $usuario_id)->first();
-
-    // Actualizar las rutas del archivo
-    $archivo->rutaF1 = $request->rutaF1;
-    // Repite este proceso para todas las rutas de archivos que necesites actualizar
-
-    // Guardar los cambios
-    $archivo->save();
-
-    // Redirigir a la página de inicio o a donde desees
-    return redirect()->route('inicio');
-}
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Formulario $formulario)
+    // Controla la acción de eliminar un formulario
+    public function destroy($id)
     {
-        //
+        $formulario = Formulario::find($id);
+
+        if (!$formulario) {
+            return redirect()->back()->with('error', 'Formulario no encontrado');
+        }
+
+        $archivo = public_path($formulario->formulario);
+        if (file_exists($archivo)) {
+            unlink($archivo);
+        }
+
+        $formulario->delete();
+
+        $formularios = Formulario::all();
+        $usuario = auth()->user();
+        return view('formularios.subir', ['formularios' => $formularios, 'usuario' => $usuario])->with('success', 'Formulario eliminado correctamente');
     }
 }

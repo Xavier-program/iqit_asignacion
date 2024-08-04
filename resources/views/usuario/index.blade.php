@@ -4,7 +4,7 @@
 @section('contenido')
     <div class="content-wrapper">
         <div class="row-md-12">
-            <div class="col-md-12">
+            <div class="col-md-12 pt-3">
                 <div class="card px-2">
                     <!-- Nombre institución -->
                     @auth

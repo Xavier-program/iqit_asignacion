@@ -5,17 +5,32 @@
     <div class="content-wrapper">
         <div class="row-md-12">
             <div class="col-md-12">
-                <div class="card">
-                    <h3>Instituciones y dependencias</h3> 
-                    <p style="font-size: 50px;">
-                        <a href="{{ url('usuario/create') }}" class="btn btn-lg ms-2" style="color: white; background-color: #6F0F9C;" role="button"><i class="fa-solid fa-folder-plus"></i> &nbsp; Registrar nueva institución</a>
-                    </p>
+                <div class="card px-3">
+                    <h3 class="">Dependencias</h3> 
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p style="font-size: 50px;">
+                                <a href="{{ url('usuario/create') }}" class="btn btn-success btn-lg ms-3" role="button"><i class="fa-solid fa-user-plus"></i> &nbsp; Agregar dependecia</a>
+                            </p>
+                        </div>
+
+                        <div>
+                        <form class="d-flex align-items-center" action="{{ url('/altaInstituciones') }}" method="GET" class="d-flex" role="search">
+                            <input class="form-control me-2" type="text" placeholder="Buscar dependencia" aria-label="Search" name="username">
+                            <button class="me-3 btn btn-secondary h-50" type="submit" value="enviar"><h5><i class="fa-solid fa-magnifying-glass"></i></h5></button>
+                        </form>
+                        </div>
+                    </div>
+
+                    <!-- <p style="font-size: 50px;">
+                        <a href="" class="btn btn-lg ms-2"  role="button"><i class="fa-solid fa-folder-plus"></i> &nbsp; Registrar nueva institución</a>
+                    </p> -->
                 <div class="card">
 
                 <main>
                  <div class="container py-4">
                  <!-- <h2  style="text-align: center;"></h2> -->
-                 <h5>Progreso total</h5>
+                 <h5>Avance total correspondiente al censo actual:</h5>
                  <hr>
 
                  <?php
@@ -59,7 +74,7 @@
                     <thead>
                         <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Institución</th>
+                        <th scope="col">Dependecia</th>
                         <th scope="col">Avance</th>
                         <th></th>
                         </tr>
@@ -90,7 +105,7 @@
                                     ?>
 
                                 </td>
-                                <td><button><a href="{{ url('/altaInstituciones/'.$usuario->id.'/archivos') }}" class="dropdown-item">Ver detalles</a></button>
+                                <td><button class="verMas"><a href="{{ url('/altaInstituciones/'.$usuario->id.'/archivos') }}" class="dropdown-item">Ver detalles</a></button>
                             </td>
                             </tr>
                             @endif

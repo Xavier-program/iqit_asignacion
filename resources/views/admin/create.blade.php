@@ -17,9 +17,9 @@
                         <div class="card-body">
                             <!-- Institución -->
                             <div class="row">
-                                <label for="username" class="col-sm-2 col-form-label">Ingresar el nombre de la institución:</label>
+                                <label for="username" class="col-sm-2 col-form-label">Nombre de la dependencia:</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="username" class="form-comtrol" placeholder="Nombre de la institución" autofocus>
+                                    <input type="text" name="username" class="form-comtrol" placeholder="Nombre de la dependencia" autofocus>
                                 </div>
                             </div>
                             <!-- Responsable -->
